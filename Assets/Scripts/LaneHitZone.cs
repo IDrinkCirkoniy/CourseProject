@@ -32,7 +32,7 @@ public class LaneHitZone : MonoBehaviour
             float timingError = Mathf.Abs(currentTrashInZone.targetBeat - currentBeat);
             float timing = 0.75f;
 
-            if (timingError <= timing) // Окно идеального попадания
+            if (timingError <= timing)
             {
                 Debug.Log($"Пресс сработал идеально! Ошибка: {timingError:F2}");
             }
