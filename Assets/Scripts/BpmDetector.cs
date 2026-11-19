@@ -88,7 +88,7 @@ public class BpmDetector : MonoBehaviour
                 int interval = peakIndices[j] - peakIndices[i];
                 if (interval >= minIntervalFrames && interval <= maxIntervalFrames)
                 {
-                    if (intervalCounts.ContainsKey(interval))
+                    if (intervalCounts.ContainsKey(interval)) 
                         intervalCounts[interval]++;
                     else
                         intervalCounts[interval] = 1;

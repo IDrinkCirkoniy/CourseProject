@@ -19,7 +19,7 @@ public class TrashController : MonoBehaviour
 
         if (progress > 1.2f)
         {
-            // Объект пролетел мимо пресса (Miss)
+            // Объект пролетел мимо пресса
             Destroy(gameObject);
         }
     }
