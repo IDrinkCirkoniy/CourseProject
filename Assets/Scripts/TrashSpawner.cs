@@ -31,8 +31,11 @@ public class TrashSpawner : MonoBehaviour
 
     void Update()
     {
-        if (Conductor.Instance == null) return;
-
+        if (Conductor.Instance == null) 
+        {
+            return;
+        }
+        
         float currentBeat = Conductor.Instance.songPositionInBeats;
 
         if (spawnedIndex < levelWave.Count)

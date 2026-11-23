@@ -60,10 +60,12 @@ public class BpmDetector : MonoBehaviour
         for (int i = historySize; i < numWindows - historySize; i++)
         {
             float localSum = 0;
+
             for (int j = i - historySize; j <= i + historySize; j++)
             {
                 localSum += energyBuffer[j];
             }
+
             float localAverage = localSum / (historySize * 2 + 1);
 
             if (energyBuffer[i] > localAverage * thresholdMultiplier)
@@ -88,10 +90,15 @@ public class BpmDetector : MonoBehaviour
                 int interval = peakIndices[j] - peakIndices[i];
                 if (interval >= minIntervalFrames && interval <= maxIntervalFrames)
                 {
-                    if (intervalCounts.ContainsKey(interval)) 
+                    if (intervalCounts.ContainsKey(interval))
+                    {
                         intervalCounts[interval]++;
+                    }
                     else
+                    {
                         intervalCounts[interval] = 1;
+                    }
+                        
                 }
             }
         }
@@ -107,13 +114,23 @@ public class BpmDetector : MonoBehaviour
             }
         }
 
-        if (bestInterval == 0) return 120f;
+        if (bestInterval == 0)
+        {
+           return 120f; 
+        } 
 
         float intervalSeconds = bestInterval * windowDuration;
         float calculatedBpm = 60f / intervalSeconds;
 
-        while (calculatedBpm < 90) calculatedBpm *= 2;
-        while (calculatedBpm > 180) calculatedBpm /= 2;
+        while (calculatedBpm < 90)
+        {
+            calculatedBpm *= 2;
+        } 
+        
+        while (calculatedBpm > 180)
+        {
+            calculatedBpm /= 2;
+        } 
 
         return calculatedBpm;
     }

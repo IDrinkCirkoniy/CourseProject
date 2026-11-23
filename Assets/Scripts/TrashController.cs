@@ -10,8 +10,11 @@ public class TrashController : MonoBehaviour
 
     private void Update()
     {
-        if (Conductor.Instance == null) return;
-
+        if (Conductor.Instance == null)
+        {
+            return;
+        }
+        
         float currentBeat = Conductor.Instance.songPositionInBeats;
         float progress = 1f - ((targetBeat - currentBeat) / beatsToTarget);
 
