@@ -28,6 +28,7 @@ public class Conductor : MonoBehaviour
     {
         secPerBeat = 60f / songBpm;
         dspSongTime = (float)AudioSettings.dspTime;
+        
         musicSource.Play();
     }
 

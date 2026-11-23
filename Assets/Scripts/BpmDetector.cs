@@ -45,11 +45,13 @@ public class BpmDetector : MonoBehaviour
         for (int i = 0; i < numWindows; i++)
         {
             float sum = 0;
+
             for (int j = 0; j < windowSize; j++)
             {
                 float sample = monoSamples[i * windowSize + j];
                 sum += sample * sample;
             }
+
             energyBuffer[i] = Mathf.Sqrt(sum / windowSize);
         }
 
@@ -105,6 +107,7 @@ public class BpmDetector : MonoBehaviour
 
         int bestInterval = 0;
         int maxCount = 0;
+        
         foreach (var kvp in intervalCounts)
         {
             if (kvp.Value > maxCount)

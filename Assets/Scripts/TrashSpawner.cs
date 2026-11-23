@@ -65,6 +65,7 @@ public class TrashSpawner : MonoBehaviour
         );
 
         TrashController controller = trashObj.GetComponent<TrashController>();
+        
         if (controller != null)
         {
             controller.trashType = data.type;
