@@ -69,7 +69,9 @@ public class TrackApiClient : MonoBehaviour
     // Доступно всем (включая Guest)
     public IEnumerator GetTracks(Action<TrackDto[]> onSuccess, Action<string> onError)
     {
-        using UnityWebRequest req = UnityWebRequest.Get($"{baseUrl}/api/tracks");
+        string url = $"{baseUrl.TrimEnd('/')}/api/tracks";
+        using UnityWebRequest req = UnityWebRequest.Get(url);
+        AttachUserHeader(req);
         yield return req.SendWebRequest();
 
         if (req.result != UnityWebRequest.Result.Success)
@@ -78,8 +80,8 @@ public class TrackApiClient : MonoBehaviour
             yield break;
         }
 
-        TrackListResponse response = JsonUtility.FromJson<TrackListResponse>(req.downloadHandler.text);
-        onSuccess?.Invoke(response != null && response.items != null ? response.items : Array.Empty<TrackDto>());
+        TrackDto[] tracks = ParseTracksJson(req.downloadHandler?.text);
+        onSuccess?.Invoke(tracks);
     }
 
     // Загрузка трека: только Creator или Admin
@@ -94,6 +96,12 @@ public class TrackApiClient : MonoBehaviour
         if (!CanCreateTrack)
         {
             onError?.Invoke($"Роль '{currentRole}' не может загружать треки.");
+            yield break;
+        }
+
+        if (string.IsNullOrWhiteSpace(currentUserId))
+        {
+            onError?.Invoke("Не заполнен Current User Id (заголовок X-User-Id не будет отправлен, сервер вернёт 401).");
             yield break;
         }
 
@@ -114,7 +122,8 @@ public class TrackApiClient : MonoBehaviour
             new MultipartFormDataSection("Bpm", bpm.ToString(CultureInfo.InvariantCulture))
         };
 
-        using UnityWebRequest req = UnityWebRequest.Post($"{baseUrl}/api/tracks", form);
+        string url = $"{baseUrl.TrimEnd('/')}/api/tracks";
+        using UnityWebRequest req = UnityWebRequest.Post(url, form);
         AttachUserHeader(req);
         yield return req.SendWebRequest();
 
@@ -124,7 +133,7 @@ public class TrackApiClient : MonoBehaviour
             yield break;
         }
 
-        TrackDto created = JsonUtility.FromJson<TrackDto>(req.downloadHandler.text);
+        TrackDto created = JsonUtility.FromJson<TrackDto>(req.downloadHandler?.text);
         onSuccess?.Invoke(created);
     }
 
@@ -145,7 +154,8 @@ public class TrackApiClient : MonoBehaviour
         });
 
         byte[] rawBody = Encoding.UTF8.GetBytes(json);
-        using UnityWebRequest req = new UnityWebRequest($"{baseUrl}/api/tracks/{trackId}", UnityWebRequest.kHttpVerbPUT);
+        string url = $"{baseUrl.TrimEnd('/')}/api/tracks/{trackId}";
+        using UnityWebRequest req = new UnityWebRequest(url, UnityWebRequest.kHttpVerbPUT);
         req.uploadHandler = new UploadHandlerRaw(rawBody);
         req.downloadHandler = new DownloadHandlerBuffer();
         req.SetRequestHeader("Content-Type", "application/json");
@@ -175,11 +185,13 @@ public class TrackApiClient : MonoBehaviour
             yield break;
         }
 
+        string trimmedBase = baseUrl.TrimEnd('/');
         string fullUrl = audioUrl.StartsWith("http", StringComparison.OrdinalIgnoreCase)
             ? audioUrl
-            : $"{baseUrl}{audioUrl}";
+            : $"{trimmedBase}/{(audioUrl.TrimStart('/'))}";
 
         using UnityWebRequest req = UnityWebRequestMultimedia.GetAudioClip(fullUrl, audioType);
+        AttachUserHeader(req);
         yield return req.SendWebRequest();
 
         if (req.result != UnityWebRequest.Result.Success)
@@ -196,5 +208,26 @@ public class TrackApiClient : MonoBehaviour
     {
         if (!string.IsNullOrWhiteSpace(currentUserId))
             req.SetRequestHeader("X-User-Id", currentUserId.Trim());
+    }
+
+    private static TrackDto[] ParseTracksJson(string rawJson)
+    {
+        if (string.IsNullOrWhiteSpace(rawJson))
+            return Array.Empty<TrackDto>();
+
+        string trimmed = rawJson.TrimStart();
+        if (trimmed.StartsWith("["))
+        {
+            string wrapped = $"{{\"items\":{trimmed}}}";
+            TrackListResponse arrayResponse = JsonUtility.FromJson<TrackListResponse>(wrapped);
+            return arrayResponse != null && arrayResponse.items != null
+                ? arrayResponse.items
+                : Array.Empty<TrackDto>();
+        }
+
+        TrackListResponse response = JsonUtility.FromJson<TrackListResponse>(trimmed);
+        return response != null && response.items != null
+            ? response.items
+            : Array.Empty<TrackDto>();
     }
 }

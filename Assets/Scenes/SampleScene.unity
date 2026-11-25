@@ -784,68 +784,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &976960058
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 976960060}
-  - component: {fileID: 976960059}
-  - component: {fileID: 976960061}
-  m_Layer: 0
-  m_Name: TrackApiTester
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &976960059
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 976960058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3525dbec99d7b2242b1969044119c629, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TrackApiTester
-  apiClient: {fileID: 976960061}
-  testAudioPath: C:\game\Rhytm Game\Assets\TypeLondon.mp3
---- !u!4 &976960060
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 976960058}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.4803, y: -0, z: 3.38311}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &976960061
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 976960058}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4016d4667a86acd45abb41117f4edf68, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TrackApiClient
-  baseUrl: http://localhost:5026
-  currentUserId: 
-  currentRole: Creator
 --- !u!1 &978702459
 GameObject:
   m_ObjectHideFlags: 0
@@ -990,7 +928,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2023197734}
   - component: {fileID: 2023197736}
-  - component: {fileID: 2023197735}
+  - component: {fileID: 2023197737}
   m_Layer: 0
   m_Name: ApiManager
   m_TagString: Untagged
@@ -1013,20 +951,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2023197735
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2023197733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3525dbec99d7b2242b1969044119c629, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::TrackApiTester
-  apiClient: {fileID: 0}
-  testAudioPath: C:\path\to\test.mp3
 --- !u!114 &2023197736
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1041,6 +965,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackApiTester
   apiClient: {fileID: 0}
   testAudioPath: C:\path\to\test.mp3
+--- !u!114 &2023197737
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2023197733}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4016d4667a86acd45abb41117f4edf68, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TrackApiClient
+  baseUrl: http://localhost:5026
+  currentUserId: 
+  currentRole: Guest
 --- !u!1 &2104080420
 GameObject:
   m_ObjectHideFlags: 0
@@ -1321,4 +1260,3 @@ SceneRoots:
   - {fileID: 355634926}
   - {fileID: 2104080421}
   - {fileID: 2023197734}
-  - {fileID: 976960060}

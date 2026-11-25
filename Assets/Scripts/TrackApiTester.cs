@@ -11,19 +11,30 @@ public class TrackApiTester : MonoBehaviour
         if (apiClient == null)
             apiClient = GetComponent<TrackApiClient>();
 
+        if (apiClient == null)
+        {
+            Debug.LogError("TrackApiTester: не найден компонент TrackApiClient!");
+            return;
+        }
+
         StartCoroutine(RunChecks());
     }
 
     private IEnumerator RunChecks()
     {
+        if (apiClient == null)
+        {
+            Debug.LogError("TrackApiTester: apiClient равен null, проверка прервана.");
+            yield break;
+        }
+
         // 1. Проверяем получение списка треков (работает даже для Guest)
         yield return apiClient.GetTracks(
             tracks => Debug.Log($"Треков получено: {tracks.Length}"),
             err => Debug.LogError($"Ошибка GetTracks: {err}")
         );
 
-        // 2. Раскомментируй блок ниже, когда укажешь реальный путь к .mp3/.ogg/.wav
-        // и задашь в TrackApiClient роль Creator/Admin + валидный Current User Id:
+        // 2. Загрузка тестового трека (нужны роль Creator/Admin и валидный Current User Id)
         yield return apiClient.UploadTrack(
             testAudioPath,
             "Test Track",
