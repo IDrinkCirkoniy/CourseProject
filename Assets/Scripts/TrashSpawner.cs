@@ -1,5 +1,5 @@
-using UnityEngine;
 using System.Collections.Generic;
+using UnityEngine;
 
 [System.Serializable]
 public struct TrashSpawnData
@@ -22,7 +22,6 @@ public class TrashSpawner : MonoBehaviour
 
     void Start()
     {
-        // Тест
         if (levelWave.Count == 0)
         {
             GenerateTestWave();
@@ -31,11 +30,11 @@ public class TrashSpawner : MonoBehaviour
 
     void Update()
     {
-        if (Conductor.Instance == null) 
+        if (Conductor.Instance == null)
         {
             return;
         }
-        
+
         float currentBeat = Conductor.Instance.songPositionInBeats;
 
         if (spawnedIndex < levelWave.Count)
@@ -52,9 +51,13 @@ public class TrashSpawner : MonoBehaviour
     {
         int laneIndex = (int)data.type;
 
-        if (trashPrefabs[laneIndex] == null || laneSpawnPoints[laneIndex] == null)
+        bool invalidPrefabs = trashPrefabs == null || laneIndex < 0 || laneIndex >= trashPrefabs.Length || trashPrefabs[laneIndex] == null;
+        bool invalidSpawns = laneSpawnPoints == null || laneIndex < 0 || laneIndex >= laneSpawnPoints.Length || laneSpawnPoints[laneIndex] == null;
+        bool invalidHits = laneHitPoints == null || laneIndex < 0 || laneIndex >= laneHitPoints.Length || laneHitPoints[laneIndex] == null;
+
+        if (invalidPrefabs || invalidSpawns || invalidHits)
         {
-            Debug.LogError($"Префаб или точка спавна для линии {laneIndex} не назначена!");
+            Debug.LogError($"Префаб, точка спавна или точка попадания для линии {laneIndex} не назначена!");
             return;
         }
 
@@ -65,7 +68,7 @@ public class TrashSpawner : MonoBehaviour
         );
 
         TrashController controller = trashObj.GetComponent<TrashController>();
-        
+
         if (controller != null)
         {
             controller.trashType = data.type;
